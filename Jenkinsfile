@@ -1,4 +1,4 @@
-pipline {
+pipeline {
     agent any
     tools {
         jdk 'jdk17'
@@ -58,7 +58,9 @@ pipline {
     }
      stage('Trivy FS Scan'){
 
-        sh "trivy fs . > trivyfs.txt"
+        steps{
+            sh "trivy fs . > trivyfs.txt"
+        }
      }
 
 
