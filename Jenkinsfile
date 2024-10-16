@@ -56,16 +56,10 @@ pipeline {
         }
 
     }
-     stage('Trivy FS Scan'){
 
+    stage('Docker Build and push'){
         steps{
-            sh "trivy fs . > trivyfs.txt"
-        }
-     }
-
-     stage('Docker Build and push'){
-        steps{
-            scripts{
+            script{
                 docker.withRegistry('',DOCKER_PASS){
                     docker_image=docker.build "${IMAGE_NAME}"
                 }
@@ -77,6 +71,14 @@ pipeline {
             }
         }
      }
+     stage('Trivy FS Scan'){
+
+        steps{
+            sh "trivy fs . > trivyfs.txt"
+        }
+     }
+
+     
 
 
 
