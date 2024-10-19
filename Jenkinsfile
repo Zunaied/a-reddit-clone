@@ -57,6 +57,13 @@ pipeline {
 
     }
 
+     stage('Trivy FS Scan'){
+
+        steps{
+            sh "trivy fs . > trivyfs.txt"
+        }
+     }
+
     stage('Docker Build and push'){
         steps{
             script{
@@ -71,13 +78,23 @@ pipeline {
             }
         }
      }
-     stage('Trivy FS Scan'){
+     stage('Trivy Docker Image Scan'){
 
         steps{
-            sh "trivy fs . > trivyfs.txt"
+            script{
+                sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image zunaied/reddit-clone-app:latest --no-progress  --scanner vuln --exit-code 0 --severity HIGH, CRITICAL --format table > trivyimage.txt')
+                
         }
      }
 
+     stage('Cleanup Artifactas'){
+        steps {
+            script {
+                sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "docker rmi ${IMAGE_NAME}:latest'
+            }
+        }
+     }
      
 
 
