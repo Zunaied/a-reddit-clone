@@ -86,6 +86,7 @@ pipeline {
                 
         }
      }
+     }
 
      stage('Cleanup Artifactas'){
         steps {
@@ -99,7 +100,7 @@ pipeline {
 
 
 
-    }
+    
    
 
 }
